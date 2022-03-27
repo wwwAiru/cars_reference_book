@@ -9,7 +9,7 @@ from models import Cars
 def index():
     form = CarsForm()
     # добавление транпортного средства
-    if request.method == 'POST':
+    if request.method == 'POST' and not request.args.get('id'):
         car_brand = form.car_brand.data
         car_model = form.car_model.data
         category = form.category.data
@@ -43,21 +43,24 @@ def index():
 
     search = request.args.get('search')
     if search:
-        cars = Cars.query.filter(Cars.car_brand.contains(search) | Cars.car_model.contains(search)).order_by(Cars.car_brand.desc())
+        cars = Cars.query.filter(Cars.car_brand.contains(search) | Cars.category.contains(search)).order_by(Cars.car_brand.desc())
     else:
         cars = Cars.query.order_by(Cars.car_brand.desc())
     pages = cars.paginate(page=page, per_page=5)
+
+    car_id = request.args.get('id')
+    if car_id:
+        car_edit = Cars.query.filter_by(id=car_id).first_or_404()
+        if request.method == 'POST' and car_id:
+            form_edit = CarsForm(formdata=request.form, obj=car_edit)
+            form_edit.populate_obj(car_edit)
+            db.session.commit()
+            return redirect(url_for('index'))
+        form_edit = CarsForm(obj=car_edit)
+        return render_template('modal.html', car_edit=car_edit, form_edit=form_edit, form=form, pages=pages, search=search)
+
     return render_template('index.html', form=form, pages=pages, search=search)
 
 
-@app.route('/<id>/edit', methods=['POST', 'GET'])
-def edit(id):
-    car = Cars.query.filter(Cars.id == id).first_or_404()
-    if request.method == 'POST':
-        form = CarsForm(formdata=request.form, obj=car)
-        print(form)
-        form.populate_obj(car)
-        db.session.commit()
-        return redirect(url_for('index'))
-    form = CarsForm(obj=car)
-    return render_template('modal.html', car=car, form=form)
+
+

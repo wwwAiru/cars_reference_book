@@ -1,5 +1,87 @@
 {% extends 'base.html' %}
 
+
+
+
+{% block search %}
+<form class="d-flex" action="{{ url_for('index')}}" method="GET">
+    <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Search"
+    name="search" value="{{ request.args.get('search', '') }}">
+    <button class="btn btn-outline-success" type="submit">Найти</button>
+</form>
+{% endblock %}
+
+
+
+{% block content %}
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Марка</th>
+        <th scope="col">Модель</th>
+        <th scope="col">Категория</th>
+        <th scope="col">Гос. номер</th>
+        <th scope="col">Тип т.с.</th>
+        <th scope="col">Год выпуска</th>
+        <th scope="col">Прицеп</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    {% for car in pages.items %}
+    <tr>
+        <td class="col-1">{{ car.car_brand }}</td>
+        <td class="col-1">{{ car.car_model }}</td>
+        <td class="col-1">{{ car.category }}</td>
+        <td class="col-1">{{ car.car_license_plate }}</td>
+        <td class="col-1">{{ car.car_type }}</td>
+        <td class="col-1">{{ car.release_year.strftime("%Y") }}</td>
+        <td class="col-1">{{ car.trailer }}</td>
+
+        <td class="col-1">
+            <button id={{car.id}}
+                    class="btn btn-outline-success"
+                    onclick='window.location.href="{{ url_for('index', id=car.id) }}"' method="PUT">
+                    Редактировать
+            </button>
+        </td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination pagination-lg">
+        <li {% if not pages.has_prev %} class="page-item disabled"  {% endif %}>
+            <a class="page-link" href="{{ url_for('index', search=search, page=pages.prev_num) }}"
+               aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+
+        {% for page in pages.iter_pages(left_edge=2,right_edge=2,left_current=1, right_current=2) %}
+        {% if page %}
+        <li {% if page == pages.page %} class="page-item active" {% endif %}>
+            <a class="page-link" href="{{ url_for('index', search=search, page=page) }}">{{ page }}</a>
+        </li>
+        {% else %}
+        <li class="page-item"><a class="page-link">...</a></li>
+        {% endif %}
+        {% endfor %}
+
+        <li {% if pages.has_next %} class="page-item"  {% else %} class="page-item disabled" {% endif %}>
+            <a class="page-link"  href="{{ url_for('index',search=search, page=pages.next_num) }}"
+               aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+{% endblock %}
+
+
 {% block modal %}
 <!-- Модальное окно -->
 <div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -10,11 +92,11 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
       </div>
       <div class="modal-body">
-        <form action="{{ url_for('edit', id=car.id)}}" method="POST">
-          {{ form.hidden_tag() }}
-          {% for field in form if field.name not in ['csrf_token'] %}
+        <form action="{{ url_for('index', id=car_edit.id)}}" method="POST">
+          {{ form_edit.hidden_tag() }}
+          {% for field in form_edit if field.name not in ['csrf_token'] %}
           {{ field.label(class="control-label") }}
-          {{ field(class="form-control") }}<br>
+          {{ field(class="form-control") }}
           {% endfor %}
           <div class="modal-footer">
           <button type="submit" class="btn btn-primary">Сохранить изменения</button>
@@ -25,6 +107,18 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+
+{% block form %}
+<form action="{{ url_for('index')}}" method="POST">
+    {{ form.hidden_tag() }}
+    {% for field in form if field.name not in ['csrf_token'] %}
+        {{ field.label(class="control-label") }}
+        {{ field(class="form-control") }}<br>
+    {% endfor %}
+    <button type="submit" class="btn btn-outline-success">Добавить</button>
+</form>
 {% endblock %}
 
 {% block script %}
