@@ -2,11 +2,10 @@
 
 
 {% block search %}
-<form class="d-flex" action="{{ url_for('index')}}" method="GET">
-    <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Search"
-    name="search" value="{{ request.args.get('search', '') }}">
+    <form class="d-flex" action="{{ url_for('index')}}" method="GET">
+    <input class="form-control me-2" type="search" placeholder="Поиск по марке автомобиля или категории:" aria-label="Search" name="search" value="{{ request.args.get('search', '') }}">
     <button class="btn btn-outline-success" type="submit">Найти</button>
-</form>
+    </form>
 {% endblock %}
 
 

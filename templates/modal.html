@@ -1,14 +1,11 @@
 {% extends 'base.html' %}
 
 
-
-
 {% block search %}
-<form class="d-flex" action="{{ url_for('index')}}" method="GET">
-    <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Search"
-    name="search" value="{{ request.args.get('search', '') }}">
+    <form class="d-flex" action="{{ url_for('index')}}" method="GET">
+    <input class="form-control me-2" type="search" placeholder="Поиск по марке автомобиля или категории:" aria-label="Search" name="search" value="{{ request.args.get('search', '') }}">
     <button class="btn btn-outline-success" type="submit">Найти</button>
-</form>
+    </form>
 {% endblock %}
 
 
@@ -42,7 +39,7 @@
         <td class="col-1">
             <button id={{car.id}}
                     class="btn btn-outline-success"
-                    onclick='window.location.href="{{ url_for('index', id=car.id) }}"' method="PUT">
+                    onclick='window.location.href="{{ url_for('index', id=car.id) }}"' method="POST">
                     Редактировать
             </button>
         </td>
@@ -89,7 +86,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Редактировать информацию</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+        <button type="button" class="btn-close" onclick='window.location.href="{{ url_for('index') }}"' method="GET" aria-label="Закрыть"></button>
       </div>
       <div class="modal-body">
         <form action="{{ url_for('index', id=car_edit.id)}}" method="POST">
@@ -99,8 +96,8 @@
           {{ field(class="form-control") }}
           {% endfor %}
           <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Сохранить изменения</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+          <button type="submit" class="btn btn-outline-success">Сохранить</button>
+          <button type="button" class="btn btn-outline-danger" onclick='window.location.href="{{ url_for('index') }}"' method="GET" >Закрыть</button>
           </div>
         </form>
       </div>

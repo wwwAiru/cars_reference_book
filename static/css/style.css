@@ -1,0 +1,46 @@
+
+.navbar-light {
+    border-radius: 10px;
+    background-color: #c6f0fd;
+    padding-top: 0.9rem;
+    padding-bottom: 0.9rem;
+ }
+
+.navbar-brand {
+    margin-left: 1rem;
+}
+
+.nav-item {
+    margin-right: 0.5rem;
+    margin-left: 0.5rem;
+}
+
+
+.btn-outline-success {
+    color: #7596f5;
+    border-color: #7596f5;
+}
+
+.btn-outline-success:hover,
+.btn-outline-success:visited {
+    background-color: #0dcaf0e6;
+}
+
+
+.page-item.active .page-link {
+    color: #4b4ec7d9;
+    background-color: #c6f0fd;
+    border-color: #c6f0fd;
+}
+
+
+.page-link {
+    position: relative;
+    display: block;
+    color: #4b4ec7d9;
+}
+
+a {
+    color:#27d2e3
+}
+
