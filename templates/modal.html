@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block modal %}
+<!-- Модальное окно -->
+<div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Редактировать информацию</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{{ url_for('edit', id=car.id)}}" method="POST">
+          {{ form.hidden_tag() }}
+          {% for field in form if field.name not in ['csrf_token'] %}
+          {{ field.label(class="control-label") }}
+          {{ field(class="form-control") }}<br>
+          {% endfor %}
+          <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="{{ url_for('static', filename='jquery-3.6.0.min.js') }}"></script>
+<script>
+  $(document).ready(function(){
+  $("#exampleModal").modal("show")
+  })
+</script>
+{% endblock %}
