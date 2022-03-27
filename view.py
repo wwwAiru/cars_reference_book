@@ -55,12 +55,14 @@ def index():
             form_edit = CarsForm(formdata=request.form, obj=car_edit)
             form_edit.populate_obj(car_edit)
             db.session.commit()
-            return redirect(url_for('index'))
+            return redirect(url_for('index', page = request.args.get('page'), search = request.args.get('search')))
         form_edit = CarsForm(obj=car_edit)
         return render_template('modal.html', car_edit=car_edit, form_edit=form_edit, form=form, pages=pages, search=search)
 
     return render_template('index.html', form=form, pages=pages, search=search)
 
-
-
-
+@app.route('/delete/<id>', methods=['POST', 'GET'])
+def delete(id):
+    Cars.query.filter_by(id=id).delete()
+    db.session.commit()
+    return redirect(url_for('index'))

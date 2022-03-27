@@ -39,7 +39,7 @@
         <td class="col-1">
             <button id={{car.id}}
                     class="btn btn-outline-success"
-                    onclick='window.location.href="{{ url_for('index', id=car.id) }}"' method="POST">
+                    onclick='window.location.href="{{ url_for('index', page=request.args.get('page', ''), id=car.id, search=search) }}"' method="GET">
                     Редактировать
             </button>
         </td>
@@ -86,10 +86,10 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Редактировать информацию</h5>
-        <button type="button" class="btn-close" onclick='window.location.href="{{ url_for('index') }}"' method="GET" aria-label="Закрыть"></button>
+        <button type="button" class="btn-close" onclick='window.location.href="{{ url_for('index', page=request.args.get('page', ''), search=search) }}"' method="GET" aria-label="Закрыть"></button>
       </div>
       <div class="modal-body">
-        <form action="{{ url_for('index', id=car_edit.id)}}" method="POST">
+        <form action="{{ url_for('index', id=car_edit.id, page=request.args.get('page', ''), search=search)}}" method="POST">
           {{ form_edit.hidden_tag() }}
           {% for field in form_edit if field.name not in ['csrf_token'] %}
           {{ field.label(class="control-label") }}
@@ -97,7 +97,7 @@
           {% endfor %}
           <div class="modal-footer">
           <button type="submit" class="btn btn-outline-success">Сохранить</button>
-          <button type="button" class="btn btn-outline-danger" onclick='window.location.href="{{ url_for('index') }}"' method="GET" >Закрыть</button>
+          <button type="button" class="btn btn-outline-danger" onclick='window.location.href="{{ url_for('index', page=request.args.get('page', ''), search=search) }}"' method="GET">Закрыть</button>
           </div>
         </form>
       </div>
