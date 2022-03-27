@@ -29,7 +29,6 @@ def index():
             db.session.commit()
             flash(message=f"Транспортное средство успешно добавлено", category='success')
         except:
-            print("ошибка")
             flash(message=f"Транспортное средство с государственным номером: {car_license_plate} уже существует", category='danger')
             db.session.rollback()
         return redirect(url_for('index'))
@@ -55,7 +54,8 @@ def index():
             form_edit = CarsForm(formdata=request.form, obj=car_edit)
             form_edit.populate_obj(car_edit)
             db.session.commit()
-            return redirect(url_for('index', page = request.args.get('page'), search = request.args.get('search')))
+            flash(message=f"Изменения сохранены", category='success')
+            return redirect(url_for('index', page=request.args.get('page'), search=request.args.get('search')))
         form_edit = CarsForm(obj=car_edit)
         return render_template('modal.html', car_edit=car_edit, form_edit=form_edit, form=form, pages=pages, search=search)
 

@@ -40,7 +40,14 @@
             <button id={{car.id}}
                     class="btn btn-outline-success"
                     onclick='window.location.href="{{ url_for('index', page=request.args.get('page', ''), id=car.id, search=search) }}"' method="GET">
-                    Редактировать
+                    Изменить
+            </button>
+        </td>
+        <td class="col-1">
+            <button id={{car.id}}
+                    class="btn btn-outline-danger"
+                    onclick='window.location.href="{{ url_for('delete',id=car.id) }}"' method="POST">
+                    Удалить
             </button>
         </td>
     </tr>
